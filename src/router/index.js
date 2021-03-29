@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-// 修改路由重复报错
+// 重写路由push方法,阻止重复点击报错
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
+}
+// 重写路由replace方法,阻止重复点击报错
+const originalReplace = VueRouter.prototype.replace;
+VueRouter.prototype.replace = function replace(location) {
+  return originalReplace.call(this, location).catch(err => err);
 }
 
 const Home = () => import('../views/home/Home')
@@ -48,6 +53,5 @@ const router = new VueRouter({
   routes,
   mode: 'history'
 })
-
 
 export default router
